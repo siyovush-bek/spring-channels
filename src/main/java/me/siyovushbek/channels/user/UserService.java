@@ -18,12 +18,12 @@ public class UserService implements UserDetailsService {
         this.encoder = encoder;
     }
 
-    public void addUser(User user) {
+    public User addUser(User user) {
         if(repository.existsById(user.getUsername())) {
             throw new UsernameAlreadyTakenException();
         }
         user.setPassword(encoder.encode(user.getPassword()));
-        repository.save(user);
+        return repository.save(user);
     }
 
     @Override
