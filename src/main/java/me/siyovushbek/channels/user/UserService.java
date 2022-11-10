@@ -32,4 +32,9 @@ public class UserService implements UserDetailsService {
                 .map(UserDetailsImpl::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with name " + username));
     }
+
+    public User getUserById(String username) {
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with name " + username));
+    }
 }
