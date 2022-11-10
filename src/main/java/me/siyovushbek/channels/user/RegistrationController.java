@@ -2,14 +2,10 @@ package me.siyovushbek.channels.user;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("api/register")
 public class RegistrationController {
 
     private final UserService userService;
@@ -18,9 +14,15 @@ public class RegistrationController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("api/register")
     ResponseEntity<Object> register(@RequestBody @Validated User user) {
         userService.addUser(user);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("api/users/{username}")
+    User getUserDetails(@PathVariable String username) {
+        return userService.getUserById(username);
+    }
+
 }
