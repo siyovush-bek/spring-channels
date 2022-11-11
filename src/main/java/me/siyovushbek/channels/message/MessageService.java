@@ -1,9 +1,9 @@
 package me.siyovushbek.channels.message;
 
 import me.siyovushbek.channels.channel.Channel;
-import me.siyovushbek.channels.channel.ChannelRepository;
-import me.siyovushbek.channels.exception.ChannelNotFoundException;
+import me.siyovushbek.channels.channel.ChannelService;
 import me.siyovushbek.channels.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,19 +13,20 @@ import java.time.LocalDateTime;
 
 @Service
 public class MessageService {
-    private final ChannelRepository channelRepository;
     private final MessageRepository messageRepository;
+
+    private final ChannelService channelService;
 
     private final int MESSAGES_COUNT_PER_PAGE = 20;
 
-    public MessageService(ChannelRepository channelRepository, MessageRepository messageRepository) {
-        this.channelRepository = channelRepository;
+    @Autowired
+    public MessageService(MessageRepository messageRepository, ChannelService channelService) {
         this.messageRepository = messageRepository;
+        this.channelService = channelService;
     }
 
     public void addMessage(String title, Message message, User user)  {
-        Channel channel = channelRepository.findById(title)
-                .orElseThrow(ChannelNotFoundException::new);
+        Channel channel = channelService.findChannelById(title);
         message.setChannel(channel);
         message.setSender(user);
         message.setSentAt(LocalDateTime.now());
@@ -34,8 +35,7 @@ public class MessageService {
     }
 
     public Page<Message> getAllMessages(String title, int page) {
-        Channel channel = channelRepository.findById(title)
-                .orElseThrow(ChannelNotFoundException::new);
+        Channel channel = channelService.findChannelById(title);
         PageRequest request = PageRequest.of(page,
                 MESSAGES_COUNT_PER_PAGE,
                 Sort.by(Sort.Direction.DESC, "sentAt"));

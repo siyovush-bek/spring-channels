@@ -10,7 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,9 +35,9 @@ public class Channel {
             name = "channel_member",
             joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "username"))
-    private Set<User> members;
+    private Set<User> members = new HashSet<>();
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     @OneToMany(mappedBy = "channel")
     List<Message> messages;
     public Channel(String title, User admin) {
@@ -82,6 +82,13 @@ public class Channel {
     @JsonProperty(value = "admin", access = JsonProperty.Access.READ_ONLY)
     public String createdBy() {
         return admin.getUsername();
+    }
+
+    @JsonProperty(value = "members", access = JsonProperty.Access.READ_ONLY)
+    public List<String> getMembersList() {
+        return members.stream()
+                .map(User::getUsername)
+                .toList();
     }
 
 }
