@@ -12,20 +12,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.*;
 
 
-class RegistrationControllerTest {
+class UserControllerTest {
     @Mock
     private UserService userService;
 
     @Mock
     User user;
-    private RegistrationController underTest;
+    private UserController underTest;
 
     AutoCloseable closeable;
 
     @BeforeEach
     void startUp() {
         closeable = MockitoAnnotations.openMocks(this);
-        underTest = new RegistrationController(userService);
+        underTest = new UserController(userService);
     }
 
     @Test
