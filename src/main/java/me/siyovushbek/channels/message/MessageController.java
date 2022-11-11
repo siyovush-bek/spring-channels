@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("api/channels")
 public class MessageController {
 
     private final MessageService service;
@@ -16,12 +17,12 @@ public class MessageController {
         this.service = service;
     }
 
-    @GetMapping("/api/{title}/messages")
+    @GetMapping("{title}/messages")
     public Page<Message> getMessages(@PathVariable String title, @RequestParam(defaultValue = "0") int page) {
         return service.getAllMessages(title, page);
     }
 
-    @PostMapping("/api/{title}/messages")
+    @PostMapping("{title}/messages")
     public ResponseEntity<Object> sendMessageToChannel(@PathVariable String title,
                                                        @RequestBody Message message,
                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {

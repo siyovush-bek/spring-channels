@@ -41,28 +41,10 @@ public class ChannelController {
     }
 
     @PostMapping("{title}")
-    public ResponseEntity<Object> sendMessageToChannel(@PathVariable String title,
-                                                       @RequestBody @Validated Message message,
-                                                       @AuthenticationPrincipal UserDetailsImpl user) {
-        channelService.addMessage(title, message, user.getUser());
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("{title}/members")
     public ResponseEntity<Object> joinChannel(@PathVariable String title,
                                       @AuthenticationPrincipal UserDetailsImpl user) {
         channelService.addMember(title, user.getUser());
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("{title}/members")
-    public Set<User> channelMembersList(@PathVariable String title) {
-        return channelService.findChannelById(title).getMembers();
-    }
-
-//    @GetMapping("{title}/messages")
-//    public List<Message> channelMessageList(@PathVariable String title) {
-//        return channelService.findChannelById(title).getMessages();
-//    }
 
 }
