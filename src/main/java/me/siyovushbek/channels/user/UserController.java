@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 
 @RestController
 public class UserController {
@@ -15,13 +17,14 @@ public class UserController {
     }
 
     @PostMapping("api/register")
-    ResponseEntity<Object> register(@RequestBody @Validated User user) {
+    public ResponseEntity<Object> register(@RequestBody @Validated User user) {
         userService.addUser(user);
-        return ResponseEntity.ok().build();
+        URI location = URI.create("api/users/" + user.getUsername());
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("api/users/{username}")
-    User getUserDetails(@PathVariable String username) {
+    public User getUserDetails(@PathVariable String username) {
         return userService.getUserById(username);
     }
 
