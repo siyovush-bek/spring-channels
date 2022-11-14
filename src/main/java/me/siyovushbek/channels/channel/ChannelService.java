@@ -42,10 +42,11 @@ public class ChannelService {
                 .filter((u -> u.getUsername().equals(user.getUsername())))
                 .findFirst();
         if(member.isEmpty()) {
-            channel.getMembers().add(user);
+            channel.addMember(user);
             repository.save(channel);
             return true;
         }
         return false;
     }
+
 }

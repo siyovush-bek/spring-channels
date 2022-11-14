@@ -7,7 +7,6 @@ import me.siyovushbek.channels.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -42,6 +41,10 @@ public class Message {
     }
 
     public Message() {
+    }
+
+    public Message(String body) {
+        this.body = body;
     }
 
     public Long getId() {

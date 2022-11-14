@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "channel")
@@ -92,4 +93,20 @@ public class Channel {
                 .toList();
     }
 
+    public boolean hasMember(User user) {
+        return members.stream()
+                .filter(u -> u.getUsername().equals(user.getUsername()))
+                .findFirst()
+                .isPresent();
+
+    }
+
+    public boolean isAdmin(User user) {
+        return admin.getUsername().equals(user.getUsername());
+    }
+
+
+    public void addMember(User user) {
+        this.members.add(user);
+    }
 }

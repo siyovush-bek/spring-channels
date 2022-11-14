@@ -2,6 +2,7 @@ package me.siyovushbek.channels.message;
 
 import me.siyovushbek.channels.channel.Channel;
 import me.siyovushbek.channels.channel.ChannelService;
+import me.siyovushbek.channels.exception.UserNonMemberInChannelException;
 import me.siyovushbek.channels.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,11 @@ public class MessageService {
 
     public void addMessage(String title, Message message, User user)  {
         Channel channel = channelService.findChannelById(title);
+
+        if(!channel.hasMember(user) && !channel.isAdmin(user)) {
+            throw new UserNonMemberInChannelException();
+        }
+
         message.setChannel(channel);
         message.setSender(user);
         message.setSentAt(LocalDateTime.now());
