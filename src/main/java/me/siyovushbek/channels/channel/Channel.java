@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class Channel {
 
     @JsonIgnore
     @OneToMany(mappedBy = "channel")
-    List<Message> messages;
+    List<Message> messages = new ArrayList<>();
     public Channel(String title, User admin) {
         this.title = title;
         this.admin = admin;

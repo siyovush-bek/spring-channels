@@ -23,10 +23,11 @@ public class ChannelService {
     }
 
     public Channel addChannel(ChannelRequest channelRequest, User admin) {
-        if(repository.existsById(channelRequest.getTitle())) {
+        String channelTitle = channelRequest.getTitle();
+        if(repository.existsById(channelTitle)) {
             throw new ChannelTitleAlreadyExistsException();
         }
-        Channel newChannel = new Channel(channelRequest.getTitle(), admin);
+        Channel newChannel = new Channel(channelTitle, admin);
         return repository.save(newChannel);
     }
 
