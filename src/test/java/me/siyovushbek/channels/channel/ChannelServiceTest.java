@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 class ChannelServiceTest {
 
@@ -20,6 +21,10 @@ class ChannelServiceTest {
 
     @Captor
     ArgumentCaptor<String> argumentCaptor;
+
+    @Captor
+    ArgumentCaptor<Channel> channelArgumentCaptor;
+
     ChannelService underTest;
     AutoCloseable closeable;
 
@@ -71,7 +76,7 @@ class ChannelServiceTest {
         ChannelRequest request = Mockito.mock(ChannelRequest.class);
         User user = Mockito.mock(User.class);
         given(request.getTitle()).willReturn("newChannel");
-        given(repository.existsById(request.getTitle())).willReturn(true);
+        given(repository.existsById("newChannel")).willReturn(true);
 
         // when && then
         assertThatThrownBy(() -> underTest.addChannel(request, user))
@@ -83,20 +88,28 @@ class ChannelServiceTest {
     // TODO: complete all tests
     @Test
     void itShouldAddChannelToDB() {
-//        ChannelRequest request = Mockito.mock(ChannelRequest.class);
-//        User user = Mockito.mock(User.class);
-//        given(request.getTitle()).willReturn("newChannel");
-//        given(repository.existsById(request.getTitle())).willReturn(false);
-//        given(repository.save())
-//
-//        assertThat(underTest.addChannel(request, user).)
+        ChannelRequest request = Mockito.mock(ChannelRequest.class);
+        User user = Mockito.mock(User.class);
+        given(request.getTitle()).willReturn("newChannel");
+        given(repository.existsById("newChannel")).willReturn(false);
+        when(repository.save(any())).then(returnsFirstArg());
+
+        Channel channel = underTest.addChannel(request, user);
+
+        Mockito.verify(repository).save(channelArgumentCaptor.capture());
+        assertThat(channel.getTitle()).isEqualTo("newChannel");
+        assertThat(channel.getAdmin()).isEqualTo(user);
+        assertThat(channel.getMembers()).isEmpty();
+        assertThat(channel.getMessages()).isEmpty();
     }
 
     @Test
     void getChannelsList() {
+
     }
 
     @Test
     void addMember() {
+
     }
 }
