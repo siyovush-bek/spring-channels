@@ -4,8 +4,6 @@ import me.siyovushbek.channels.exception.UsernameAlreadyTakenException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,15 +22,11 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder encoder;
-    @Captor
-    private ArgumentCaptor<User> userArgumentCaptor;
 
-    @Captor
-    private ArgumentCaptor<String> passwordArgumentCaptor;
     private UserService underTest;
 
     String username = "test_user";
-    User newUser = new User(username, "test_password");
+    User newUser;
 
     AutoCloseable closeable;
 
@@ -40,6 +34,7 @@ class UserServiceTest {
     void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
         underTest = new UserService(userRepository, encoder);
+        newUser = new User(username, "test_password");
     }
 
     @AfterEach
@@ -68,9 +63,9 @@ class UserServiceTest {
         underTest.addUser(newUser);
 
         // then
-        then(encoder).should().encode(passwordArgumentCaptor.capture());
         assertThat(newUser.getPassword()).isEqualTo(encodedPassword);
-        then(userRepository).should().save(userArgumentCaptor.capture());
+        then(userRepository).should().save(newUser);
+
     }
 
     @Test
@@ -89,6 +84,22 @@ class UserServiceTest {
 
         assertThat(underTest.loadUserByUsername(username))
                 .isInstanceOf(UserDetailsImpl.class);
+    }
+
+    @Test
+    void testLoadUserByUsernameWhenUserExists() {
+        given(userRepository.findByUsername(username)).willReturn(Optional.of(newUser));
+
+        assertThat(underTest.loadUserByUsername(username)).isInstanceOf(UserDetailsImpl.class);
+
+    }
+
+    @Test
+    void testLoadUserByUsernameWhenUserDoesNotExist() {
+        given(userRepository.findByUsername(username)).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> underTest.loadUserByUsername(username)).isInstanceOf(UsernameNotFoundException.class);
+
     }
     
 }
