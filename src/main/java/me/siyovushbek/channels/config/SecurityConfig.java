@@ -27,7 +27,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
                         .antMatchers("/api/register").permitAll()
-                        .antMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userService)
