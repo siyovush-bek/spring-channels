@@ -1,5 +1,5 @@
 import React from "react";
-import MessageBox from "./MessageBox";
+import MessageBox from "./Channel";
 
 export default function Chat(){
     return (

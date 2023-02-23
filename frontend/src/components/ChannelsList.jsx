@@ -1,5 +1,6 @@
 import React from "react";
 import ChannelsLink from "./ChannelLink";
+import { Link } from "react-router-dom";
 
 export default function ChannelsList() {
     return (
@@ -7,17 +8,10 @@ export default function ChannelsList() {
           <div className="sidebar-sticky">
             <ul className="nav flex-column">
               <li className="nav-item">
-                <ChannelsLink 
-                    current={true} 
-                    name = "1st Channel"
-                    link = "#"
-                />
+                <Link to="/channel1">channel1</Link>
               </li>
               <li className="nav-item">
-                <ChannelsLink 
-                    name = "2nd Channel"
-                    link = "#"
-                />
+                <Link to="/channel2">channel2</Link>
               </li>
             </ul>
           </div>
