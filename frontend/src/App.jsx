@@ -1,21 +1,17 @@
-import Header from "./components/Header"
-import ChannelsList from "./components/ChannelsList"
-import Chat from "./components/Chat"
+import { Route, Routes } from "react-router-dom"
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import Signup from "./pages/Signup"
 import './App.css'
 
 
 function App() {
-
   return (
-    <div>
-      <Header />
-      <div className="container-fluid">
-        <div className="row">
-          <ChannelsList />
-          <Chat />
-        </div>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+    </Routes>
   )
 }
 
