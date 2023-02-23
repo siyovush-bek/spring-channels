@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/channels")
+@CrossOrigin("*")
 public class MessageController {
 
     private final MessageService service;

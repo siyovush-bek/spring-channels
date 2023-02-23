@@ -8,6 +8,7 @@ import java.net.URI;
 
 
 @RestController
+@CrossOrigin("*")
 public class UserController {
 
     private final UserService userService;
